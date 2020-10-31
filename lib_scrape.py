@@ -4,11 +4,6 @@
 from lxml import html
 import requests
 
-# Test
-
-webpage = 'https://www.bestbuy.com/site/pny-geforce-rtx-3080-10gb-xlr8-gaming-epic-x-rgb-triple-fan-graphics-card/6432655.p?skuId=6432655'
-
-
 class Scraper:
 
     # Init
