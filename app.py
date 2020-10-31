@@ -4,7 +4,11 @@
 from flask import Flask, jsonify, render_template
 from lib_scrape import Scraper
 
-# CONFIG DATA
+# CONFIG DATA ----------------------------------------
+
+# Polling interval
+POLLING = 180000 # in ms. Default 3 min.
+
 # Webpage data in the form of (short_name, weburl) per entry
 WEBPAGES = [
     ('Best Buy PNY 3080','https://www.bestbuy.com/site/pny-geforce-rtx-3080-10gb-xlr8-gaming-epic-x-rgb-triple-fan-graphics-card/6432655.p?skuId=6432655'),
@@ -39,6 +43,8 @@ KEYWORDS = [
     'Buy Now'
 ]
 
+# ----------------------------------------------------
+
 # Set app
 app = Flask(__name__)
 
@@ -56,7 +62,7 @@ def hello():
             'idName': shortPage[i].replace(' ', '_').replace('&','-')
         }
         webPages.append(page);
-    return render_template('index.html', webPages=webPages);
+    return render_template('index.html', webPages=webPages, pollingInt=POLLING);
 
 # Getter route for updates webpage info
 @app.route('/update', methods=['POST'])
