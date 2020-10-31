@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+   <head>
+        <style>
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                table-layout: fixed;
+                width: 1000px;
+            }
+            
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+            
+            tr {
+                background-color: #ff8282;
+            }
+            tr:first-child {
+                background-color: #c0c0c0;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <title>Stock Monitor</title>
+   </head>
+   <body>
+        <table>
+            <tr>
+                <th>Source</th>
+                <th>Status</th>
+            </tr>
+            {% for page in webPages %}
+            <tr id='{{ page.idName }}-row' >
+                <td><a href="{{ page.longName }}">{{ page.shortName }}</a></td>
+                <td id='{{ page.idName }}-text'>Out of Stock</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <script>
+            $.ajax({
+                url: '/update',
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                    for (var site in response) {
+                        let rowId = '#' + site.replace(/ /g, '_') + '-row';
+                        let textId = '#' + site.replace(/ /g, '_') + '-text';
+                        if (response[site]) {
+                            $(rowId).css('background-color', '#89fa7a');
+                            $(textId).text('In Stock');
+                        } else {
+                            $(rowId).css('background-color', '#ff8282');
+                            $(textId).text('Out of Stock');
+                        }
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+            setInterval(function(){$.ajax({
+                url: '/update',
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                    for (var site in response) {
+                        let rowId = '#' + site.replace(/ /g, '_') + '-row';
+                        let textId = '#' + site.replace(/ /g, '_') + '-text';
+                        if (response[site]) {
+                            $(rowId).css('background-color', '#89fa7a');
+                            $(textId).text('In Stock');
+                        } else {
+                            $(rowId).css('background-color', '#ff8282');
+                            $(textId).text('Out of Stock');
+                        }
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            })}, 180000);
+        </script>
+   </body>
+</html>
